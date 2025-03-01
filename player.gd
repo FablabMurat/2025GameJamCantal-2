@@ -11,16 +11,15 @@ var facing = 0;
 var try_jump: bool = false
 var running: bool = false
 
-var base_stats: CharacterStats
+var character_data: CharacterData
 var stats: CharacterStats
 
 func init_character(character_id: String):
-	var data: CharacterData = (Data.CHARACTERS_DATA.get(character_id) as CharacterData);
-	base_stats = data.stats;
-	stats = base_stats.duplicate();
-	$WorldCollision.shape = data.collision_shape;
-	$AnimatedSprite2D.sprite_frames = data.sprite_frames;
-	$AnimatedSprite2D.offset = data.sprite_offset
+	character_data = (Data.CHARACTERS_DATA.get(character_id) as CharacterData);
+	stats = character_data.stats.duplicate();
+	$WorldCollision.shape = character_data.collision_shape;
+	$AnimatedSprite2D.sprite_frames = character_data.sprite_frames;
+	$AnimatedSprite2D.offset = character_data.sprite_offset
 	$AnimatedSprite2D.play("idle")
 
 func _ready() -> void:
@@ -42,7 +41,7 @@ func handle_input(event: InputEvent):
 		if (event as InputEventJoypadButton).button_index == JOY_BUTTON_B && event.pressed:
 			$AnimatedSprite2D.play("attack")
 			var projectile = preload("res://projectile.tscn").instantiate();
-			projectile.init_projectile("camelia_missile")
+			projectile.init_projectile(character_data.attack)
 			projectile.position = position;
 			(projectile.get_node("AnimatedSprite2D") as AnimatedSprite2D).flip_h = $AnimatedSprite2D.flip_h
 			projectile.thrower = self;
@@ -76,7 +75,7 @@ func _physics_process(delta):
 func handle_death(reason: Data.DeathReason):
 	velocity = Vector2(0, 0);
 	position = Vector2(50, 18);
-	stats.health = base_stats.health;
+	stats.health = character_data.stats.health;
 
 func _on_exit_screen() -> void:
 	death.emit(Data.DeathReason.VOID);
