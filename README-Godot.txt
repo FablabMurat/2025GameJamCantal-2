@@ -219,7 +219,7 @@ x) Pour le player, dans un area3D avec collisionShape : mask 3
 x) Pour l'objet, layer +3
 x) associer les signaux de la zone Area3D du player :  body_entered, body_exited
 x) pour conserver l'état de ce qui est proche, coder 
-    func _on_area_3d_body_entered(body):
+	func _on_area_3d_body_entered(body):
 	if body.is_in_group("arbre"):
 		#print ("près d'un arbre ")
 		sapinsProches[body.get_rid()] = body
@@ -228,7 +228,7 @@ x) pour conserver l'état de ce qui est proche, coder
 	else:
 		prints ("autre body :", body)
 		
-    func _on_area_3d_body_exited(body):
+	func _on_area_3d_body_exited(body):
 	if body.is_in_group("arbre"):
 		#print("loin d'un' sapin")
 		sapinsProches.erase(body.get_rid())
@@ -462,7 +462,7 @@ Forcer les contrôles à s'adapter au passage en plein écran :
 ------------------------------------------------------------
 
 1) Définir la fonction qui va propager le changement de taille de fenêtre :
-    func resized():
+	func resized():
 	var vp : Viewport = get_viewport()
 	$PanelContainer.size = vp.size
 	$Menu/PanelContainer.size = vp.size
@@ -474,7 +474,7 @@ Forcer les contrôles à s'adapter au passage en plein écran :
 3) Eventuellement forcer le démarrage en Full Screen
 	Paramètre du Projet
 	->Affichage / Fenêtre
-	    ->Mode = Fullscreen
+		->Mode = Fullscreen
 
 Mettre une subview qui suit un personnage :
 -------------------------------------------

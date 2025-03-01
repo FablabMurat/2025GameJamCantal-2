@@ -3,8 +3,6 @@ extends CharacterBody2D
 
 signal death(reason: Data.DeathReason)
 
-# How fast the player moves
-@export var SPEED = 200;
 # Vertical impulse applied to the character upon jumping
 @export var JUMP_IMPULSE = -400
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity");
@@ -16,9 +14,14 @@ var target_velocity: Vector2 = Vector2.ZERO;
 var facing = 0;
 var try_jump: bool = false
 
+var base_stats: CharacterStats
+var stats: CharacterStats
 
 func init_character(character_id: String):
 	var data: CharacterData = (Data.CHARACTERS_DATA.get(character_id) as CharacterData);
+	base_stats = data.stats;
+	stats = base_stats.duplicate();
+	$WorldCollision.shape = data.collision_shape;
 	$AnimatedSprite2D.sprite_frames = data.sprite_frames;
 	$AnimatedSprite2D.play("idle")
 
@@ -41,31 +44,33 @@ func handle_input(event: InputEvent):
 			projectile.init_projectile("camelia_missile")
 			projectile.position = position;
 			(projectile.get_node("AnimatedSprite2D") as AnimatedSprite2D).flip_h = $AnimatedSprite2D.flip_h
-			get_parent().add_child(projectile)
+			projectile.thrower = self;
+			get_parent().add_child(projectile);
 
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
 	if abs(left_joystick_direction.x) > 0.2:
-		velocity.x = left_joystick_direction.x * SPEED
+		velocity.x = left_joystick_direction.x * stats.speed
 		if abs(velocity.x) < 0.01:
-			facing = 0
-			$AnimatedSprite2D.animation = "idle"
+			facing = 0;
+			$AnimatedSprite2D.play("idle");
 		else:
-			$AnimatedSprite2D.animation = "walk"
+			$AnimatedSprite2D.play("walk");
 			facing = velocity.x;
-			$AnimatedSprite2D.flip_h = facing < 0
+			$AnimatedSprite2D.flip_h = facing < 0;
 	else:
-		velocity.x = velocity.x / 1.2
+		velocity.x = velocity.x / 1.2;
 	
 	if try_jump and is_on_floor():
-		velocity.y = JUMP_IMPULSE
-	move_and_slide()
+		velocity.y = JUMP_IMPULSE;
+	move_and_slide();
 
 func handle_death(reason: Data.DeathReason):
-	velocity = Vector2(0, 0)
-	position = Vector2(50, 18)
+	velocity = Vector2(0, 0);
+	position = Vector2(50, 18);
+	stats.health = base_stats.health;
 
 func _on_exit_screen() -> void:
 	death.emit(Data.DeathReason.VOID);

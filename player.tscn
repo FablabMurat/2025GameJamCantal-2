@@ -1,22 +1,23 @@
 [gd_scene load_steps=3 format=3 uid="uid://bnnav48dalni8"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_6vsy3"]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_233h8"]
-radius = 24.0
-height = 90.0
+[ext_resource type="Shape2D" uid="uid://bjk8hde3xsqu5" path="res://resources/characters/sauge_collision_shape.tres" id="2_4epe3"]
 
 [node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+floor_snap_length = 10.0
+safe_margin = 0.15
 script = ExtResource("1_6vsy3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_233h8")
+[node name="WorldCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = ExtResource("2_4epe3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.1, 0.1)
 
 [node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(-1, -2)
-scale = Vector2(3.8, 4.9)
+position = Vector2(1.19209e-07, 1)
+scale = Vector2(3.8, 5.45)
 
 [connection signal="screen_exited" from="VisibleOnScreen" to="." method="_on_exit_screen"]

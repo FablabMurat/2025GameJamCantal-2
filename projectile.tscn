@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://projectile.gd" id="1_cfpbh"]
 
 [node name="Projectile" type="Area2D"]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_cfpbh")
 
 [node name="VisibleOnScreen" type="VisibleOnScreenNotifier2D" parent="."]
@@ -12,4 +14,5 @@ rect = Rect2(-30, -30, 60, 60)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="VisibleOnScreen" to="." method="_on_exit_screen"]
