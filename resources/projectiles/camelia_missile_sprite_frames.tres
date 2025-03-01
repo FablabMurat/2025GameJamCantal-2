@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://ujgqsaoe442l"]
+
+[ext_resource type="Texture2D" uid="uid://bhjfq2x7hvbrp" path="res://assets/characters/camelia/projectile.png" id="1_xia8k"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_xia8k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

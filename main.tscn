@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://4hx1coaxhep6"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_q023w"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_q023w")
+
+[node name="Gui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="InFightGui" type="Control" parent="Gui"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="OutFightGui" type="Control" parent="Gui"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="World" type="StaticBody2D" parent="."]
+position = Vector2(0, 426)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="World"]
+position = Vector2(3, 470)
+polygon = PackedVector2Array(0, 0, 588, 0, 787, 184, 0, 184)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="World"]
+position = Vector2(1624, 476)
+scale = Vector2(2.11875, 6.8125)
+polygon = PackedVector2Array(-55.6815, 0, 140, 0, 140, 27, 40.6017, 27.3028)

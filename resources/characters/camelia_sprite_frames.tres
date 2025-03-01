@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://b4yn470lf4hhc"]
+
+[ext_resource type="Texture2D" uid="uid://bka0mwu475rik" path="res://assets/characters/camelia/idle1.png" id="1_4fxrb"]
+[ext_resource type="Texture2D" uid="uid://dkuvadabee8fv" path="res://assets/characters/camelia/idle2.png" id="2_x2sfo"]
+[ext_resource type="Texture2D" uid="uid://b3ujirh61sk72" path="res://assets/characters/camelia/idle3.png" id="3_nk6uj"]
+[ext_resource type="Texture2D" uid="uid://de16p4os1nhqk" path="res://assets/characters/camelia/walk1.png" id="4_6q1dr"]
+[ext_resource type="Texture2D" uid="uid://dxam2b2n7agic" path="res://assets/characters/camelia/walk2.png" id="5_7i24i"]
+[ext_resource type="Texture2D" uid="uid://bbmkjckofnnf4" path="res://assets/characters/camelia/walk3.png" id="6_le2qf"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_4fxrb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_x2sfo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_nk6uj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_6q1dr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7i24i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_le2qf")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
