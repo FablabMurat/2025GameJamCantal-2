@@ -1,17 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bnnav48dalni8"]
+[gd_scene load_steps=2 format=3 uid="uid://bnnav48dalni8"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_6vsy3"]
-[ext_resource type="Shape2D" uid="uid://bjk8hde3xsqu5" path="res://resources/characters/sauge_collision_shape.tres" id="2_4epe3"]
 
 [node name="Player" type="CharacterBody2D"]
+scale = Vector2(2, 2)
 collision_layer = 2
 floor_snap_length = 10.0
 safe_margin = 0.15
 script = ExtResource("1_6vsy3")
 
 [node name="WorldCollision" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
-shape = ExtResource("2_4epe3")
+position = Vector2(0, 10)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.1, 0.1)

@@ -21,9 +21,12 @@ func update_combat_ui() -> void:
 		$Gui/InFightGui/RichTextLabel.add_text("Player %d: %d HP\n" % [(player as Player).id, (player as Player).stats.health]);
 		
 
+var current_character: int = 0
+
 func init_player(id: int) -> Player:
 	var player = preload("res://player.tscn").instantiate()
-	player.init_character("sauge")
+	player.init_character(["sauge", "muguet"][current_character])
+	current_character+=1;
 	player.id = id
 	add_child(player);
 	player.position.x = 50
