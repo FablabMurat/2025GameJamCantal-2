@@ -11,6 +11,7 @@ var facing = 0;
 var try_jump: bool = false
 var running: bool = false
 
+var selected_character: String
 var character_data: CharacterData
 var stats: CharacterStats
 
@@ -26,7 +27,7 @@ func _ready() -> void:
 	print("Player %d joins the fight"%id);
 	death.connect(handle_death)
 
-func handle_input(event: InputEvent):
+func handle_game_input(event: InputEvent):
 	if event is InputEventJoypadMotion:
 		if (event as InputEventJoypadMotion).axis == JOY_AXIS_LEFT_X:
 			left_joystick_direction.x = (event as InputEventJoypadMotion).axis_value
@@ -48,6 +49,8 @@ func handle_input(event: InputEvent):
 			get_parent().add_child(projectile);
 
 func _physics_process(delta):
+	if !get_parent().is_processing():
+		return
 	var on_floor = is_on_floor();
 	
 	if not on_floor:

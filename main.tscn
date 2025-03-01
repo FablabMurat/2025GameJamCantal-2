@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://4hx1coaxhep6"]
+[gd_scene load_steps=4 format=3 uid="uid://4hx1coaxhep6"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_q023w"]
 [ext_resource type="Script" path="res://world.gd" id="2_ydqov"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yqf6k"]
+font_size = 40
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_q023w")
@@ -14,6 +17,7 @@ offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
 [node name="InFightGui" type="Control" parent="Gui"]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -27,12 +31,29 @@ bbcode_enabled = true
 text = "Player 1: 200 HP"
 
 [node name="OutFightGui" type="Control" parent="Gui"]
+layout_mode = 1
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 metadata/_edit_use_anchors_ = true
 
+[node name="PlayerSelector" type="HBoxContainer" parent="Gui/OutFightGui"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Label" type="Label" parent="Gui/OutFightGui"]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 950.0
+offset_right = 512.0
+offset_bottom = 1120.0
+text = "Select your plant !
+Press <START> to join"
+label_settings = SubResource("LabelSettings_yqf6k")
+
 [node name="World" type="StaticBody2D" parent="."]
+visible = false
 position = Vector2(0, 426)
 script = ExtResource("2_ydqov")
 
