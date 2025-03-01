@@ -11,7 +11,7 @@ var facing = 0;
 var try_jump: bool = false
 var running: bool = false
 
-var selected_character: String
+var selected_character: int = 0
 var character_data: CharacterData
 var stats: CharacterStats
 
