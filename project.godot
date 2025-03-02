@@ -13,7 +13,9 @@ config_version=5
 config/name="SuperPlantBros"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/image="uid://bk6tt38morxg1"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=2000
 
 [autoload]
 

@@ -8,7 +8,6 @@ var current_season: Data.Season = Data.Season.SUMMER;
 
 signal player_join(device: int);
 signal players_ready;
-signal change_season;
 
 func _ready() -> void:
 	start_game(false);
@@ -24,6 +23,10 @@ func start_game(toggle: bool = true) -> void:
 	$World.set_physics_process(toggle);
 	round_running = toggle;
 	if toggle:
+		current_season = Data.Season.get(Data.Season.keys().pick_random());
+		$World/Background.texture = (Data.MAP_DATA["mountains"] as MapData).backgrounds.get(current_season);
+		$World/AudioStreamPlayer.stream = Data.SEASONS_DATA[current_season].music;
+		$World/AudioStreamPlayer.play()
 		for device in DEVICES_MAP:
 			var player: Player = DEVICES_MAP[device];
 			player.init_character(Data.CHARACTERS_DATA.keys()[player.selected_character]);
@@ -72,6 +75,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func add_to_selection_ui(device: int) -> void:
 	var selector := AnimatedSprite2D.new();
+	selector.scale = Vector2(0.5, 0.5);
 	var character_data: CharacterData = Data.CHARACTERS_DATA.values()[0];
 	selector.sprite_frames = character_data.sprite_frames;
 	selector.play("idle");
@@ -81,6 +85,8 @@ func add_to_selection_ui(device: int) -> void:
 	var selector_label: Label = Label.new();
 	selector_label.text = character_data.display_name;
 	selector_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER;
+	selector_label.label_settings = LabelSettings.new()
+	selector_label.label_settings.font_color = Color.DARK_OLIVE_GREEN;
 	selector_label.scale = Vector2(2, 2);
 	selector.add_child(selector_label);
 	$Gui/OutFightGui/PlayerSelector.add_child(selector);
@@ -117,7 +123,7 @@ func update_selection_ui() -> void:
 		else:
 			((child as AnimatedSprite2D).material as ShaderMaterial).shader = null
 			label.text = "<- %s ->"%character_data.display_name;
-		child.position = Vector2(960 + ((-float(player_count)/2 + i ) * 300) + 150, 400);
+		child.position = Vector2(960 + ((-float(player_count)/2 + i ) * 300) + 150, 500);
 		
 		i+=1;
 	if player_count == 0:

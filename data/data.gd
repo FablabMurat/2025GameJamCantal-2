@@ -64,3 +64,30 @@ var CHARACTERS_DATA: Dictionary[String, CharacterData] = {
 		Vector2(0, -70)
 	),
 }
+
+var MAP_DATA: Dictionary[String, MapData] = {
+	"mountains": MapData.new(
+		"Mountains",
+		{
+			Season.SPRING: preload("res://assets/backgrounds/seasons/spring.png"),
+			Season.SUMMER: preload("res://assets/backgrounds/seasons/summer.png"),
+			Season.AUTUMN: preload("res://assets/backgrounds/seasons/autumn.png"),
+			Season.WINTER: preload("res://assets/backgrounds/seasons/winter.png"),
+		}
+	)
+}
+
+var SEASONS_DATA: Dictionary[Season, SeasonData] = {
+	Season.SPRING: SeasonData.new(
+		preload("res://assets/sounds/spring.mp3")
+	),
+	Season.SUMMER: SeasonData.new(
+		preload("res://assets/sounds/summer.mp3")
+	),
+	Season.AUTUMN: SeasonData.new(
+		preload("res://assets/sounds/autumn.mp3")
+	),
+	Season.WINTER: SeasonData.new(
+		preload("res://assets/sounds/winter.mp3")
+	),
+}

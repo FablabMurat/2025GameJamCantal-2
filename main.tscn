@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://4hx1coaxhep6"]
+[gd_scene load_steps=6 format=3 uid="uid://4hx1coaxhep6"]
 
 [ext_resource type="Script" uid="uid://da0kvh3kfmoh4" path="res://main.gd" id="1_q023w"]
+[ext_resource type="Texture2D" uid="uid://ptr46o0lcn3c" path="res://assets/backgrounds/character_selection_menu.png" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://4liep6qopmit" path="res://world.gd" id="2_ydqov"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yqf6k"]
 font_size = 40
+font_color = Color(4.09111e-06, 0.75672, 0.309321, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_q023w")
@@ -37,6 +41,10 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 metadata/_edit_use_anchors_ = true
 
+[node name="CharacterSelectionMenu" type="Sprite2D" parent="Gui/OutFightGui"]
+position = Vector2(961, 538)
+texture = ExtResource("2_h2yge")
+
 [node name="PlayerSelector" type="HBoxContainer" parent="Gui/OutFightGui"]
 layout_mode = 0
 offset_right = 1920.0
@@ -66,6 +74,13 @@ visible = false
 position = Vector2(0, 426)
 script = ExtResource("2_ydqov")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="World"]
+autoplay = true
+
+[node name="Background" type="Sprite2D" parent="World"]
+centered = false
+offset = Vector2(0, -424)
+
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="World"]
 position = Vector2(-5, 466)
 polygon = PackedVector2Array(0, 0, 588, 0, 787, 184, 0, 184)
@@ -85,5 +100,13 @@ color = Color(1, 1, 1, 0)
 [node name="HazardTimer" type="Timer" parent="World"]
 wait_time = 10.0
 autostart = true
+
+[node name="TransitionShaderSurface" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_272bh")
+offset_left = -28.0
+offset_top = -21.0
+offset_right = 1936.0
+offset_bottom = 1103.0
+color = Color(0, 0, 0, 0)
 
 [connection signal="timeout" from="World/HazardTimer" to="World" method="_on_hazard_timer_timeout"]
