@@ -1,12 +1,61 @@
-[gd_scene load_steps=6 format=3 uid="uid://4hx1coaxhep6"]
+[gd_scene load_steps=17 format=3 uid="uid://4hx1coaxhep6"]
 
 [ext_resource type="Script" uid="uid://da0kvh3kfmoh4" path="res://main.gd" id="1_q023w"]
 [ext_resource type="Texture2D" uid="uid://ptr46o0lcn3c" path="res://assets/backgrounds/character_selection_menu.png" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://4liep6qopmit" path="res://world.gd" id="2_ydqov"]
+[ext_resource type="Texture2D" uid="uid://bk6tt38morxg1" path="res://assets/backgrounds/main_menu.png" id="3_5vw27"]
+[ext_resource type="Texture2D" uid="uid://np0o2l1g65h" path="res://assets/backgrounds/menu/character_selection_anim_1.png" id="3_dg77c"]
+[ext_resource type="Texture2D" uid="uid://dgeh0db2gw7ng" path="res://assets/backgrounds/menu/main_anim_1.png" id="4_kek77"]
+[ext_resource type="Texture2D" uid="uid://dedkd8ssrybs1" path="res://assets/backgrounds/menu/character_selection_anim_2.png" id="4_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://0lemhnubuyrn" path="res://assets/backgrounds/menu/main_anim_2.png" id="5_4c57u"]
+[ext_resource type="Texture2D" uid="uid://cmvks0v3k0ftq" path="res://assets/backgrounds/menu/character_selection_anim_3.png" id="5_w48qg"]
+[ext_resource type="Texture2D" uid="uid://gkvnee8ru4rn" path="res://assets/backgrounds/menu/main_anim_3.png" id="6_efxa6"]
+[ext_resource type="Texture2D" uid="uid://cug1rjrpm72oe" path="res://assets/backgrounds/menu/character_selection_anim_4.png" id="6_vivmo"]
+[ext_resource type="Texture2D" uid="uid://nwsrwaiqpahq" path="res://assets/backgrounds/menu/main_anim_4.png" id="7_dg77c"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2cqfq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_dg77c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ycdy4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_w48qg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_vivmo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yqf6k"]
 font_size = 40
 font_color = Color(4.09111e-06, 0.75672, 0.309321, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ycdy4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_kek77")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_4c57u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_efxa6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_dg77c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
 
@@ -42,8 +91,12 @@ offset_bottom = 1080.0
 metadata/_edit_use_anchors_ = true
 
 [node name="CharacterSelectionMenu" type="Sprite2D" parent="Gui/OutFightGui"]
-position = Vector2(961, 538)
 texture = ExtResource("2_h2yge")
+centered = false
+
+[node name="CharacterSelectionMenuAnimation" type="AnimatedSprite2D" parent="Gui/OutFightGui"]
+sprite_frames = SubResource("SpriteFrames_2cqfq")
+centered = false
 
 [node name="PlayerSelector" type="HBoxContainer" parent="Gui/OutFightGui"]
 layout_mode = 0
@@ -52,24 +105,34 @@ offset_bottom = 1080.0
 
 [node name="JoinLabel" type="Label" parent="Gui/OutFightGui"]
 layout_mode = 0
-offset_left = 11.0
-offset_top = 970.0
-offset_right = 484.0
-offset_bottom = 1104.0
-text = "Select your plant !
-Press <START> to join/leave"
+offset_top = 1000.0
+offset_right = 473.0
+offset_bottom = 1080.0
 label_settings = SubResource("LabelSettings_yqf6k")
 
 [node name="LockLabel" type="Label" parent="Gui/OutFightGui"]
-offset_left = 1108.0
-offset_top = 1020.0
-offset_right = 1914.0
-offset_bottom = 1085.0
-text = "Press <SELECT> to (un)lock your character"
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 1000.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 label_settings = SubResource("LabelSettings_yqf6k")
 horizontal_alignment = 2
 
-[node name="World" type="StaticBody2D" parent="."]
+[node name="BeforeStartMenu" type="Control" parent="Gui"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MainMenuSprite" type="Sprite2D" parent="Gui/BeforeStartMenu"]
+texture = ExtResource("3_5vw27")
+centered = false
+
+[node name="MainMenuAnimation" type="AnimatedSprite2D" parent="Gui/BeforeStartMenu"]
+sprite_frames = SubResource("SpriteFrames_ycdy4")
+centered = false
+
+[node name="World" type="Node2D" parent="."]
 visible = false
 position = Vector2(0, 426)
 script = ExtResource("2_ydqov")
@@ -80,15 +143,6 @@ autoplay = true
 [node name="Background" type="Sprite2D" parent="World"]
 centered = false
 offset = Vector2(0, -424)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="World"]
-position = Vector2(-5, 466)
-polygon = PackedVector2Array(0, 0, 588, 0, 787, 184, 0, 184)
-
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="World"]
-position = Vector2(1616, 468)
-scale = Vector2(2.11875, 6.8125)
-polygon = PackedVector2Array(-55.6815, 0, 140, 0, 140, 27, 41.0619, 27.0092)
 
 [node name="ShaderSurface" type="ColorRect" parent="World"]
 offset_left = -31.0

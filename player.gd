@@ -19,8 +19,10 @@ var stats: CharacterStats;
 
 func init_character(character_id: String):
 	character_data = (Data.CHARACTERS_DATA.get(character_id) as CharacterData);
-	stats = character_data.stats.duplicate();
+	stats = character_data.stats.duplicate(true);
+	stats.health_change.connect(health_update);
 	dead = false;
+	try_jump = false;
 	velocity = Vector2(0,0);
 	left_joystick_direction = Vector2(0,0);
 	$WorldCollision.shape = character_data.collision_shape;
@@ -38,7 +40,6 @@ func handle_game_input(event: InputEvent):
 			left_joystick_direction.x = (event as InputEventJoypadMotion).axis_value
 		if (event as InputEventJoypadMotion).axis == JOY_AXIS_LEFT_Y:
 			left_joystick_direction.y = (event as InputEventJoypadMotion).axis_value
-		#print(left_joystick_direction)
 	if (event is InputEventJoypadButton):
 		if (event as InputEventJoypadButton).button_index == JOY_BUTTON_A:
 			try_jump = event.pressed;
@@ -79,6 +80,10 @@ func _physics_process(delta):
 	if try_jump and on_floor:
 		velocity.y = -stats.jump_strength;
 	move_and_slide();
+
+func health_update():
+	if stats.health <= 0:
+		death.emit(self, Data.DeathReason.NO_HEALTH);
 
 func handle_death(_player: Player, _reason: Data.DeathReason):
 	dead = true;

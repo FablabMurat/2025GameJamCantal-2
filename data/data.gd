@@ -1,14 +1,20 @@
 extends Node
 
 enum Season{SUMMER, AUTUMN, WINTER, SPRING}
+var current_season: Season = Season.SUMMER;
 
 enum DeathReason { VOID, NO_HEALTH };
 
-enum ProjectileSpeed {PROJECTILE_SPEED_FAST = 500}
+enum ProjectileSpeed {
+	PROJECTILE_SPEED_FAST = 500,
+	PROJECTILE_SPEED_VERY_SLOW = 75,
+	PROJECTILE_SPEED_STATIC = 0,
+}
 
 enum CharacterSpeed {
 	CHARACTER_SPEED_FAST = 500,
-	CHARACTER_SPEED_MEDIUM = 300
+	CHARACTER_SPEED_MEDIUM = 300,
+	CHARACTER_SPEED_STATIC = 0
 };
 
 enum JumpStrength {
@@ -27,6 +33,11 @@ var DAMAGE_ON_COLLIDE = func(projectile: Projectile, body: Node2D) -> void:
 	if body is Player:
 		(body as Player).stats.health -= 10;
 	projectile.queue_free()
+	
+var DAMAGE_AND_APPEAR_ON_COLLIDE = func(projectile: Projectile, body: Node2D) -> void:
+	if body is Player:
+		(body as Player).stats.health -= 10;
+	(projectile.get_node("AnimatedSprite2D") as AnimatedSprite2D).play("display");
 
 var EXPLODE_ON_COLLIDE = func(projectile: Projectile, body: Node2D) -> void:
 	DAMAGE_ON_COLLIDE.call(projectile, body);
@@ -38,6 +49,13 @@ var PROJECTILES_DATA: Dictionary[String, ProjectileData] = {
 		preload("res://resources/projectiles/camelia_missile_shape.tres"),
 		ProjectileSpeed.PROJECTILE_SPEED_FAST,
 		EXPLODE_ON_COLLIDE
+	),
+	"muguet_sword": ProjectileData.new(
+		preload("res://resources/projectiles/muguet_hit_sprite_frames.tres"),
+		preload("res://resources/projectiles/muguet_hit_collision.tres"),
+		ProjectileSpeed.PROJECTILE_SPEED_VERY_SLOW,
+		DAMAGE_AND_APPEAR_ON_COLLIDE,
+		0.5
 	),
 	"sauge_leaf": ProjectileData.new(
 		preload("res://resources/projectiles/sauge_leaf_sprite_frames.tres"),
@@ -57,7 +75,7 @@ var CHARACTERS_DATA: Dictionary[String, CharacterData] = {
 	),
 	"muguet": CharacterData.new(
 		"Muguet",
-		"camelia_missile",
+		"muguet_sword",
 		preload("res://resources/characters/muguet_sprite_frames.tres"),
 		preload("res://resources/characters/muguet_collision_shape.tres"),
 		CharacterStats.new(80, CharacterSpeed.CHARACTER_SPEED_FAST, JumpStrength.JUMP_STRENGTH_HIGH, Gravity.GRAVITY_MEDIUM),
@@ -68,6 +86,7 @@ var CHARACTERS_DATA: Dictionary[String, CharacterData] = {
 var MAP_DATA: Dictionary[String, MapData] = {
 	"mountains": MapData.new(
 		"Mountains",
+		preload("res://maps/mountains_map.tscn"),
 		{
 			Season.SPRING: preload("res://assets/backgrounds/seasons/spring.png"),
 			Season.SUMMER: preload("res://assets/backgrounds/seasons/summer.png"),

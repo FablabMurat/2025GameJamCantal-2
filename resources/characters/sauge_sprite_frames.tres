@@ -1,8 +1,11 @@
-[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://kbgs6lma1wiv"]
+[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://kbgs6lma1wiv"]
 
 [ext_resource type="Texture2D" uid="uid://dev7p6swp461o" path="res://assets/characters/sauge/idle_1.png" id="1_207vd"]
+[ext_resource type="Texture2D" uid="uid://ceuuw7ctg468f" path="res://assets/characters/sauge/attack_1.png" id="1_jm12u"]
+[ext_resource type="Texture2D" uid="uid://dkfxu74j72jd" path="res://assets/characters/sauge/attack_2.png" id="2_crtah"]
 [ext_resource type="Texture2D" uid="uid://bdmhxjymtdr7l" path="res://assets/characters/sauge/idle_2.png" id="2_xe0fb"]
 [ext_resource type="Texture2D" uid="uid://fy6weip2q3ed" path="res://assets/characters/sauge/idle_3.png" id="3_iil4p"]
+[ext_resource type="Texture2D" uid="uid://dbs1etcwmsyey" path="res://assets/characters/sauge/attack_3.png" id="3_r0347"]
 [ext_resource type="Texture2D" uid="uid://xgww56qri0kw" path="res://assets/characters/sauge/jump_1.png" id="4_ulu5v"]
 [ext_resource type="Texture2D" uid="uid://e4x8ijc8isk2" path="res://assets/characters/sauge/walk_1.png" id="4_w5thl"]
 [ext_resource type="Texture2D" uid="uid://fkeaqd4xinuv" path="res://assets/characters/sauge/jump_2.png" id="5_5vmpk"]
@@ -12,6 +15,29 @@
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jm12u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_crtah")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r0347")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r0347")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r0347")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r0347")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 9.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_207vd")

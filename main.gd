@@ -4,12 +4,17 @@ extends Node2D
 var DEVICES_MAP: Dictionary[int, Player] = {};
 
 var round_running: bool = false;
-var current_season: Data.Season = Data.Season.SUMMER;
+
+var GAME_RUNNING: bool = false;
+
+var current_map_node: Node2D;
 
 signal player_join(device: int);
 signal players_ready;
 
 func _ready() -> void:
+	$Gui/BeforeStartMenu/MainMenuAnimation.play("default");
+	$Gui/OutFightGui/CharacterSelectionMenuAnimation.play("default");
 	start_game(false);
 	player_join.connect(add_to_selection_ui);
 	players_ready.connect(start_game);
@@ -23,26 +28,52 @@ func start_game(toggle: bool = true) -> void:
 	$World.set_physics_process(toggle);
 	round_running = toggle;
 	if toggle:
-		current_season = Data.Season.get(Data.Season.keys().pick_random());
-		$World/Background.texture = (Data.MAP_DATA["mountains"] as MapData).backgrounds.get(current_season);
-		$World/AudioStreamPlayer.stream = Data.SEASONS_DATA[current_season].music;
-		$World/AudioStreamPlayer.play()
 		for device in DEVICES_MAP:
 			var player: Player = DEVICES_MAP[device];
 			player.init_character(Data.CHARACTERS_DATA.keys()[player.selected_character]);
+		Data.current_season = Data.Season.get(Data.Season.keys().pick_random());
+		var map_data: MapData = (Data.MAP_DATA["mountains"] as MapData);
+		$World/Background.texture = map_data.backgrounds.get(Data.current_season);
+		current_map_node = map_data.scene.instantiate();
+		$World.add_child(current_map_node);
+		$World/AudioStreamPlayer.stream = Data.SEASONS_DATA[Data.current_season].music;
+		$World/AudioStreamPlayer.volume_db = -50;
+		$World/AudioStreamPlayer.play()
+		var tween: Tween = create_tween();
+		tween.tween_property($World/AudioStreamPlayer, "volume_db", 0.0, 10.0);
+		if $World/AudioStreamPlayer.stream is AudioStreamMP3:
+			($World/AudioStreamPlayer.stream as AudioStreamMP3).loop = true;
+		for device in DEVICES_MAP:
+			var player: Player = DEVICES_MAP[device];
 			player.position.x = 300 * (device+1);
 			player.position.y = 0;
 			player.show();
 			player.locked_character = false;
 		update_selection_ui()
 	else:
+		for node in get_tree().get_nodes_in_group("projectiles"):
+			node.queue_free();
+		if current_map_node != null:
+			current_map_node.queue_free();
+		var tween: Tween = create_tween();
+		tween.tween_property($World/AudioStreamPlayer, "volume_db", -100.0, 3.0);
+		tween.finished.connect($World/AudioStreamPlayer.stop);
 		for device in DEVICES_MAP:
 			var player: Player = DEVICES_MAP[device];
 			player.hide()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if DEVICES_MAP.has(event.device):
+	if !GAME_RUNNING:
+		if !(event is InputEventJoypadButton and (event as InputEventJoypadButton).button_index==JOY_BUTTON_START and event.is_pressed()):
+			return;
+		else:
+			GAME_RUNNING = true;
+			$Gui/BeforeStartMenu.hide();
+			var new_player: Player = init_player(event.device);
+			DEVICES_MAP[event.device] = new_player;
+			player_join.emit(event.device)
+	elif DEVICES_MAP.has(event.device):
 		if round_running:
 			(DEVICES_MAP[event.device] as Player).handle_game_input(event);
 		else:
@@ -94,7 +125,6 @@ func add_to_selection_ui(device: int) -> void:
 
 func remove_from_selection_ui(device: int) -> void:
 	var selector_ind: int = $Gui/OutFightGui/PlayerSelector.get_children().find_custom(func(child: AnimatedSprite2D): return child.name==str(device));
-	print(selector_ind)
 	if selector_ind != -1:
 		var selector: AnimatedSprite2D = $Gui/OutFightGui/PlayerSelector.get_child(selector_ind);
 		selector.free();
@@ -105,7 +135,6 @@ func update_selection_ui() -> void:
 	var ready_player_count: int = 0;
 	var i: int = 0;
 	var highlight_shader: Shader = preload("res://resources/shaders/highlight.gdshader");
-	print(DEVICES_MAP)
 	for child in ($Gui/OutFightGui/PlayerSelector.get_children() as Array[AnimatedSprite2D]):
 		var player: Player = DEVICES_MAP[int((child.name as StringName).c_escape())] as Player;
 		var character_data: CharacterData = Data.CHARACTERS_DATA.values()[player.selected_character];
@@ -123,25 +152,22 @@ func update_selection_ui() -> void:
 		else:
 			((child as AnimatedSprite2D).material as ShaderMaterial).shader = null
 			label.text = "<- %s ->"%character_data.display_name;
-		child.position = Vector2(960 + ((-float(player_count)/2 + i ) * 300) + 150, 500);
+		child.position = Vector2(960 + ((-float(player_count)/2 + i ) * 300) + 150, 550);
 		
 		i+=1;
 	if player_count == 0:
-		$Gui/OutFightGui/JoinLabel.text = "Select your plant !\nPress <START> to join\nMissing 2 players to start...";
-		$Gui/OutFightGui/JoinLabel.position.y = 900;
+		$Gui/OutFightGui/JoinLabel.text = "Missing 2 players to start...";
+		GAME_RUNNING = false;
+		$Gui/BeforeStartMenu.show();
 	elif player_count == 1:
-		$Gui/OutFightGui/JoinLabel.text = "Select your plant !\nPress <START> to join\nMissing a player to start...";
-		$Gui/OutFightGui/JoinLabel.position.y = 900;
+		$Gui/OutFightGui/JoinLabel.text = "Missing a player to start...";
 	else:
-		$Gui/OutFightGui/JoinLabel.text = "Select your plant !\nPress <START> to join";
-		$Gui/OutFightGui/JoinLabel.position.y = 960;
+		$Gui/OutFightGui/JoinLabel.text = "";
 		if ready_player_count == player_count:
-			$Gui/OutFightGui/LockLabel.text = "Press <SELECT> to (un)lock your character";
-			$Gui/OutFightGui/LockLabel.position.y = 1020;
+			$Gui/OutFightGui/LockLabel.text = "";
 			players_ready.emit()
 	if ready_player_count != player_count:
-		$Gui/OutFightGui/LockLabel.text = "Press <SELECT> to (un)lock your character\n%d player(s) not ready" % (player_count - ready_player_count);
-		$Gui/OutFightGui/LockLabel.position.y = 960;
+		$Gui/OutFightGui/LockLabel.text = "%d player(s) not ready" % (player_count - ready_player_count);
 		
 
 func update_combat_ui() -> void:
@@ -150,12 +176,9 @@ func update_combat_ui() -> void:
 		$Gui/InFightGui/RichTextLabel.add_text("Player %d: %d HP\n" % [(player as Player).id, (player as Player).stats.health]);
 	
 
-var current_character: int = 0
-
 func player_death(player: Player, _reason: Data.DeathReason):
 	player.dead = true;
 	var alive_players = DEVICES_MAP.values().filter(func(p: Player): return !p.dead);
-	print(alive_players)
 	if alive_players.size() <= 1:
 		start_game(false);
 

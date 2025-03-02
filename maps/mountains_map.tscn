@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://dh02exi608t7u"]
+
+[ext_resource type="Texture2D" uid="uid://cnp4s7ewpk4ff" path="res://assets/maps/big_island.png" id="1_b7ghs"]
+[ext_resource type="Script" uid="uid://db77r8r8hvx8h" path="res://maps/mountains_map.gd" id="1_tuqbm"]
+[ext_resource type="Texture2D" uid="uid://7shep2ym07px" path="res://assets/maps/floating_platform.png" id="2_5iawb"]
+[ext_resource type="Texture2D" uid="uid://bkyjx7juohshy" path="res://assets/maps/grass_big_island.png" id="2_sq0mq"]
+[ext_resource type="Texture2D" uid="uid://byaib4dj2eh4t" path="res://assets/maps/snow_big_island.png" id="3_tuqbm"]
+[ext_resource type="Texture2D" uid="uid://dmo7ttxnrxnsi" path="res://assets/maps/grass_floating_platform.png" id="6_5brmy"]
+[ext_resource type="Texture2D" uid="uid://dxg1uauphoeqe" path="res://assets/maps/snow_floating_platform.png" id="7_stn74"]
+
+[node name="MountainsMap" type="StaticBody2D"]
+collision_layer = 3
+script = ExtResource("1_tuqbm")
+
+[node name="MainIsland" type="Sprite2D" parent="."]
+position = Vector2(32, -607)
+scale = Vector2(0.862805, 0.827474)
+texture = ExtResource("1_b7ghs")
+centered = false
+
+[node name="MainIslandGrass" type="Sprite2D" parent="MainIsland"]
+texture = ExtResource("2_sq0mq")
+centered = false
+
+[node name="MainIslandSnow" type="Sprite2D" parent="MainIsland"]
+texture = ExtResource("3_tuqbm")
+centered = false
+
+[node name="SmallIsland" type="Sprite2D" parent="."]
+position = Vector2(26, -631)
+texture = ExtResource("2_5iawb")
+centered = false
+
+[node name="SmallIslandGrass" type="Sprite2D" parent="SmallIsland"]
+texture = ExtResource("6_5brmy")
+centered = false
+
+[node name="SmallIslandSnow" type="Sprite2D" parent="SmallIsland"]
+texture = ExtResource("7_stn74")
+centered = false
+
+[node name="MainIslandCollisionShape" type="CollisionPolygon2D" parent="."]
+position = Vector2(-93, -202)
+scale = Vector2(0.867667, 0.756696)
+polygon = PackedVector2Array(218, 494, 261, 154, 466.769, 125.546, 398, 297, 464, 529, 1870, 525, 1925.86, 348.885, 1871.69, 125.546, 2066, 150, 2110, 293, 2105, 585, 1896, 913, 1176.72, 1162.95, 396.466, 878.82)
+
+[node name="SmallIslandCollisionShape" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(1256, -275, 1256, -227, 1173, -160, 1100, -164, 1052, -120, 944, -104, 838, -229, 830, -271)
