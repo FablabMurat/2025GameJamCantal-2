@@ -1,5 +1,7 @@
 extends Node
 
+enum Season{SUMMER, AUTUMN, WINTER, SPRING}
+
 enum DeathReason { VOID, NO_HEALTH };
 
 enum ProjectileSpeed {PROJECTILE_SPEED_FAST = 500}
@@ -30,7 +32,7 @@ var EXPLODE_ON_COLLIDE = func(projectile: Projectile, body: Node2D) -> void:
 	DAMAGE_ON_COLLIDE.call(projectile, body);
 
 
-var PROJECTILES_DATA: Dictionary = {
+var PROJECTILES_DATA: Dictionary[String, ProjectileData] = {
 	"camelia_missile": ProjectileData.new(
 		preload("res://resources/projectiles/camelia_missile_sprite_frames.tres"),
 		preload("res://resources/projectiles/camelia_missile_shape.tres"),
@@ -45,7 +47,7 @@ var PROJECTILES_DATA: Dictionary = {
 	),
 }
 
-var CHARACTERS_DATA: Dictionary = {
+var CHARACTERS_DATA: Dictionary[String, CharacterData] = {
 	"sauge": CharacterData.new(
 		"Sauge",
 		"sauge_leaf",

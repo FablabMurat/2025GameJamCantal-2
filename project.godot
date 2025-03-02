@@ -12,12 +12,13 @@ config_version=5
 
 config/name="SuperPlantBros"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Data="*res://data/data.gd"
+Utils="*res://utils.gd"
 
 [display]
 

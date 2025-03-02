@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d3yxc8ivdvi0s"]
 
-[ext_resource type="Script" path="res://projectile.gd" id="1_cfpbh"]
+[ext_resource type="Script" uid="uid://eytd4asww7x2" path="res://projectile.gd" id="1_cfpbh"]
 
 [node name="Projectile" type="Area2D"]
 collision_layer = 2

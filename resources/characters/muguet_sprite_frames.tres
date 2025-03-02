@@ -27,6 +27,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("2_jhdnj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qg3me")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_jhdnj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_en0th")
 }],
 "loop": false,
 "name": &"attack",
@@ -58,6 +67,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("6_va1vs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_gyqsr")
 }],
 "loop": true,
 "name": &"jump",

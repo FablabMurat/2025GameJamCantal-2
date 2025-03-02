@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bnnav48dalni8"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_6vsy3"]
+[ext_resource type="Script" uid="uid://8bg18s0q4qou" path="res://player.gd" id="1_6vsy3"]
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(2, 2)

@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody2D
 
-signal death(reason: Data.DeathReason)
+signal death(player: Player, reason: Data.DeathReason);
+var dead: bool = false;
 
 var id: int;
 
@@ -11,13 +12,17 @@ var facing = 0;
 var try_jump: bool = false
 var running: bool = false
 
-var selected_character: int = 0
-var character_data: CharacterData
-var stats: CharacterStats
+var selected_character: int = 0;
+var locked_character: bool = false;
+var character_data: CharacterData;
+var stats: CharacterStats;
 
 func init_character(character_id: String):
 	character_data = (Data.CHARACTERS_DATA.get(character_id) as CharacterData);
 	stats = character_data.stats.duplicate();
+	dead = false;
+	velocity = Vector2(0,0);
+	left_joystick_direction = Vector2(0,0);
 	$WorldCollision.shape = character_data.collision_shape;
 	$AnimatedSprite2D.sprite_frames = character_data.sprite_frames;
 	$AnimatedSprite2D.offset = character_data.sprite_offset
@@ -40,17 +45,17 @@ func handle_game_input(event: InputEvent):
 		if (event as InputEventJoypadButton).button_index == JOY_BUTTON_X:
 			running = event.pressed;
 		if (event as InputEventJoypadButton).button_index == JOY_BUTTON_B && event.pressed:
-			$AnimatedSprite2D.play("attack")
+			$AnimatedSprite2D.play("attack");
 			var projectile = preload("res://projectile.tscn").instantiate();
-			projectile.init_projectile(character_data.attack)
+			projectile.init_projectile(character_data.attack);
 			projectile.position = position;
-			(projectile.get_node("AnimatedSprite2D") as AnimatedSprite2D).flip_h = $AnimatedSprite2D.flip_h
+			(projectile.get_node("AnimatedSprite2D") as AnimatedSprite2D).flip_h = $AnimatedSprite2D.flip_h;
 			projectile.thrower = self;
 			get_parent().add_child(projectile);
 
 func _physics_process(delta):
-	if !get_parent().is_processing():
-		return
+	if dead or !(get_parent() as Main).round_running:
+		return;
 	var on_floor = is_on_floor();
 	
 	if not on_floor:
@@ -58,7 +63,7 @@ func _physics_process(delta):
 		velocity.y += stats.gravity * delta
 	
 	if abs(left_joystick_direction.x) > 0.2:
-		velocity.x = left_joystick_direction.x * stats.speed * (1.5 if running and on_floor else 1)
+		velocity.x = left_joystick_direction.x * stats.speed * (1.5 if running and on_floor else 1.0)
 		
 		if on_floor:
 			$AnimatedSprite2D.play("walk");
@@ -75,10 +80,9 @@ func _physics_process(delta):
 		velocity.y = -stats.jump_strength;
 	move_and_slide();
 
-func handle_death(reason: Data.DeathReason):
-	velocity = Vector2(0, 0);
-	position = Vector2(50, 18);
+func handle_death(_player: Player, _reason: Data.DeathReason):
+	dead = true;
 	stats.health = character_data.stats.health;
 
 func _on_exit_screen() -> void:
-	death.emit(Data.DeathReason.VOID);
+	death.emit(self, Data.DeathReason.VOID);

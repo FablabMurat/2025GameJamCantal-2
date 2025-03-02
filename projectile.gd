@@ -4,8 +4,8 @@ extends Area2D
 var projectile_data: ProjectileData
 var thrower: Node2D
 
-func init_projectile(name: String) -> void:
-	projectile_data = (Data.PROJECTILES_DATA.get(name) as ProjectileData);
+func init_projectile(projectile_name: String) -> void:
+	projectile_data = (Data.PROJECTILES_DATA.get(projectile_name) as ProjectileData);
 	$CollisionShape2D.shape = projectile_data.collision_shape;
 	$AnimatedSprite2D.sprite_frames = projectile_data.sprite_frames;
 	$AnimatedSprite2D.play();
@@ -13,7 +13,7 @@ func init_projectile(name: String) -> void:
 func _ready() -> void:
 	print("Spawned projectile");
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_body_entered(body: Node2D) -> void:
